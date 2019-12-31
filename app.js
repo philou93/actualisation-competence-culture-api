@@ -3,6 +3,8 @@ var cookieParser = require('cookie-parser');
 var nodeMailer = require('nodemailer');
 var cors = require('cors')
 
+const fs = require('fs');
+
 var app = express();
 
 app.use(express.json());
@@ -12,7 +14,6 @@ app.options('*', cors());
 
 app.post("/api/send-email", (req, res) => {
   const answers = req.body.answers;
-  console.log(answers)
   if(answers === undefined){
     res.status(401).send();
     return;
@@ -28,23 +29,23 @@ app.post("/api/send-email", (req, res) => {
         // should be replaced with real sender's account
         user: 'admin@competence-culture.actualisation.com',
         pass: 'sG&{g]}Ju&N&'
-    },
+    }
+  });
+  let mailOptions = {
+    from: "admin@competence-culture.actualisation.com",
+    to: 'paudet.fortin@gmail.com',
+    subject: "Nouvelle réponse pour compétense-culture",
+    body: "",
     attachments: [
       {
         filename: 'reponse.txt',
         content: Buffer.from(JSON.stringify(answers), 'utf-8')
       }
     ]
-  });
-  let mailOptions = {
-      to: 'louis.fortin@actualisation.com',
-      subject: "Nouvelle réponse pour compétense-culture",
-      body: ""
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error)
+    if (error) { 
       res.status(401).send();
       return;
     }
