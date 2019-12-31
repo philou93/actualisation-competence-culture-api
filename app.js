@@ -12,12 +12,11 @@ app.options('*', cors());
 
 app.post("/api/send-email", (req, res) => {
   const answers = req.body.answers;
+  console.log(answers)
   if(answers === undefined){
-    res.status(401);
+    res.status(401).send();
     return;
   }
-
-  console.log(answers)
   
   // TODO: valider que tous les champs sont présents
 
@@ -46,13 +45,13 @@ app.post("/api/send-email", (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error)
-      res.status(401);
+      res.status(401).send();
       return;
     }
     console.log('Message %s sent: %s', info.messageId, info.response);
   });
 
-  res.status(200);
+  res.status(200).send();
 });
 
 app.listen(8081, () => {
